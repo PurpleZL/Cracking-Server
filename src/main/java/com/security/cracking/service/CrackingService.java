@@ -29,17 +29,13 @@ public class CrackingService {
     public HashResponseDTO crackBcrypt(HashRequestDTO hashReq){
         HashResponseDTO hashResp = new HashResponseDTO();
         BCryptPasswordEncoder bCrypt = new BCryptPasswordEncoder();
-        if (hashReq.getPasswd() != null && !hashReq.getPasswd().isBlank()){
+        if (hasPassword(hashReq)){
             if(bCrypt.matches(hashReq.getPasswd(), hashReq.getHash())){
-                hashResp.setSuccess(true);
-                hashResp.setHash(hashReq.getHash());
-                hashResp.setHashType(hashReq.getHashType());
-                hashResp.setPasswdCracked(hashReq.getPasswd());
-                hashResp.setMessage("Hash [" + hashReq.getHash() + "] Cracked: " + hashReq.getPasswd());
+                hashResp = success(hashReq, hashReq.getPasswd());
                 return hashResp;
             }
         }
-        if (hashReq.getPassListF() != null && !hashReq.getPassListF().isEmpty()){
+        if (hasPassList(hashReq)){
             try (BufferedReader br = new BufferedReader(
                     new InputStreamReader(hashReq.getPassListF().getInputStream()))) {
 
@@ -47,11 +43,7 @@ public class CrackingService {
                 while ((password = br.readLine()) != null) {
 
                     if (bCrypt.matches(password, hashReq.getHash())) {
-                        hashResp.setSuccess(true);
-                        hashResp.setHash(hashReq.getHash());
-                        hashResp.setHashType(hashReq.getHashType());
-                        hashResp.setPasswdCracked(password);
-                        hashResp.setMessage("Hash [" + hashReq.getHash() + "] Cracked: " + password);
+                        success(hashReq, password);
                         return hashResp;
                     }
                 }
@@ -61,7 +53,39 @@ public class CrackingService {
             }
         }
 
+        hashResp = error(hashReq, " Hash not cracked");
         return hashResp;
+    }
+
+    /**
+     * Auxiliares
+     */
+
+    private boolean hasPassword(HashRequestDTO req) {
+        return req.getPasswd() != null && !req.getPasswd().isBlank();
+    }
+
+    private boolean hasPassList(HashRequestDTO req) {
+        return req.getPassListF() != null && !req.getPassListF().isEmpty();
+    }
+
+    private HashResponseDTO success(HashRequestDTO req, String password) {
+        HashResponseDTO r = new HashResponseDTO();
+        r.setSuccess(true);
+        r.setHash(req.getHash());
+        r.setHashType(req.getHashType());
+        r.setPasswdCracked(password);
+        r.setMessage("Hash cracked");
+        return r;
+    }
+
+    private HashResponseDTO error(HashRequestDTO req, String msg) {
+        HashResponseDTO r = new HashResponseDTO();
+        r.setSuccess(false);
+        r.setHash(req.getHash());
+        r.setHashType(req.getHashType());
+        r.setMessage(msg);
+        return r;
     }
 
 }
