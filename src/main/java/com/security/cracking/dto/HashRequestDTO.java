@@ -15,6 +15,8 @@ public class HashRequestDTO {
     @NotBlank
     private String hash;
 
+    private String salt;
+    private MultipartFile saltListF;
     private String hashType;
     private String passwd;
     private MultipartFile passListF;

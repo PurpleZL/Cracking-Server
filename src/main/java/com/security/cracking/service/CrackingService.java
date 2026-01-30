@@ -40,6 +40,7 @@ public class CrackingService {
         r.setSuccess(true);
         r.setHash(req.getHash());
         r.setHashType(req.getHashType());
+        r.setSalt(req.getSalt());
         r.setPasswdCracked(password);
         r.setMessage("Hash cracked");
         return r;

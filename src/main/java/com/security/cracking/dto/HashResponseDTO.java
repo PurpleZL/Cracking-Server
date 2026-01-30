@@ -14,6 +14,7 @@ public class HashResponseDTO {
     private boolean success = false;
     private String message;
 
+    private String salt;
     private String hash;
     private String hashType;
     private String passwdCracked;

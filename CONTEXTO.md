@@ -188,7 +188,6 @@ return result
 ---
 
 # HASHES QUE SE INCORPORARAN
-- argon2
 - MD5
 - SHA-1
 - SHA-256
