@@ -22,13 +22,12 @@ public class CrackingService {
                 .orElseThrow(() -> new IllegalArgumentException("Unsupported hash type: " + hashReq.getHashType()))
                 .crack(hashReq)
                 .map(pwd -> success(hashReq, pwd))
-                .orElse(error(hashReq, "Hash not cracked"));
+                .orElse(fail(hashReq, "Hash not cracked"));
     }
 
     /**
      * Auxiliares
      */
-
 
     private HashResponseDTO success(HashRequestDTO req, String password) {
         HashResponseDTO r = new HashResponseDTO();
@@ -40,7 +39,7 @@ public class CrackingService {
         return r;
     }
 
-    private HashResponseDTO error(HashRequestDTO req, String msg) {
+    private HashResponseDTO fail(HashRequestDTO req, String msg) {
         HashResponseDTO r = new HashResponseDTO();
         r.setSuccess(false);
         r.setHash(req.getHash());

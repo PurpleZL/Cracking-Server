@@ -1,7 +1,7 @@
 package com.security.cracking.service;
 
 import com.security.cracking.dto.HashRequestDTO;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -9,13 +9,28 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Optional;
 
-@Component
-public class BCryptCracker implements HashCracker {
+/**
+ * - Aguanta GPU
+ * - Necesita Mucha Memoria, Mucha RAM
+ *
+ * Parameters:
+ * Tamaño salt
+ * Tamaño hash
+ * Paralelismo
+ * Coste Memoria
+ * Iteraciones
+ * $argon2<type>$v=<version>$m=<mem>,t=<time>,p=<parallel>$<salt>$<hash>
+ */
 
-    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+@Component
+public class Argon2Cracker implements HashCracker{
+
+    private final Argon2PasswordEncoder encoder =
+            Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8();
 
     @Override
     public Optional<String> crack(HashRequestDTO hashReq) {
+
         if (hasPassword(hashReq)) {
             if (encoder.matches(hashReq.getPasswd(), hashReq.getHash())) {
                 return Optional.of(hashReq.getPasswd());
@@ -41,7 +56,7 @@ public class BCryptCracker implements HashCracker {
 
     @Override
     public boolean supports(String hashType) {
-        return "BCrypt".equalsIgnoreCase(hashType);
+        return "Argon2".equalsIgnoreCase(hashType);
     }
 
     @Override
@@ -55,13 +70,12 @@ public class BCryptCracker implements HashCracker {
     }
 
     @Override
-    public boolean hasSaltList(HashRequestDTO req){
-        return false;
-    }
-
-    @Override
     public boolean hasSalt(HashRequestDTO req){
         return false;
     }
 
+    @Override
+    public boolean hasSaltList(HashRequestDTO req){
+        return false;
+    }
 }
