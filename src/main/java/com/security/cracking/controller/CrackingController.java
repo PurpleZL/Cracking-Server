@@ -3,7 +3,6 @@ package com.security.cracking.controller;
 import com.security.cracking.dto.HashRequestDTO;
 import com.security.cracking.dto.HashResponseDTO;
 import com.security.cracking.service.CrackingService;
-import com.security.cracking.service.HashCracker;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

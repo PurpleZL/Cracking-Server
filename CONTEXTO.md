@@ -187,13 +187,6 @@ return result
 
 ---
 
-# HASHES QUE SE INCORPORARAN
-- MD5
-- SHA-1
-- SHA-256
-- NTLM
-- PostgreSQL MD5
-
 # NOTAS PARA FUTURAS SESIONES
 - El usuario quiere aprender, no que le haga el codigo directamente
 - Explicar el "por que" de cada cambio
