@@ -28,14 +28,8 @@ public class CrackingController {
             errorResp.setMessage("Password or PassList cant be empty");
             return ResponseEntity.badRequest().body(errorResp);
         }
-        try {
             HashResponseDTO hashResp = crackingService.crackPasswd(hashReq);
             return ResponseEntity.ok().body(hashResp);
-        } catch (IllegalArgumentException iae) {
-            HashResponseDTO errorResp = new HashResponseDTO();
-            errorResp.setMessage(iae.getMessage());
-            return ResponseEntity.badRequest().body(errorResp);
-        }
     }
 
     @GetMapping("/hashtypes")
